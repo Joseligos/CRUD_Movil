@@ -30,28 +30,44 @@ export class GrupoMultimediaService {
   }
   /**
    * Obtiene un grupo multimedia por su ID
-   */
-  getGrupoMultimedia(id: string): Observable<GrupoMultimediaResponse> {
-    return this.http.get<GrupoMultimediaResponse>(`${this.apiUrl}/${id}`);
-  }  /**
+   */  getGrupoMultimedia(id: string): Observable<GrupoMultimediaResponse> {
+    return this.http.get<GrupoMultimediaResponse>(`${this.apiUrl}/${id}`)
+      .pipe(
+        tap(response => console.log('Get grupo multimedia response:', response)),
+        catchError(this.handleError)
+      );
+  }
+  
+  /**
    * Crea un nuevo grupo multimedia
    */
   createGrupoMultimedia(grupo: GrupoMultimedia): Observable<GrupoMultimediaResponse> {
     console.log('Creating grupo multimedia:', grupo);
-    return this.http.post<GrupoMultimediaResponse>(this.apiUrl, grupo);
+    return this.http.post<GrupoMultimediaResponse>(this.apiUrl, grupo)
+      .pipe(
+        tap(response => console.log('Create grupo multimedia response:', response)),
+        catchError(this.handleError)
+      );
   }
-
   /**
    * Actualiza un grupo multimedia existente
    */
   updateGrupoMultimedia(id: string, grupo: GrupoMultimedia): Observable<GrupoMultimediaResponse> {
-    return this.http.put<GrupoMultimediaResponse>(`${this.apiUrl}/${id}`, grupo);
+    return this.http.put<GrupoMultimediaResponse>(`${this.apiUrl}/${id}`, grupo)
+      .pipe(
+        tap(response => console.log('Update grupo multimedia response:', response)),
+        catchError(this.handleError)
+      );
   }
 
   /**
    * Elimina un grupo multimedia (cambio de estado a false)
    */
   deleteGrupoMultimedia(id: string): Observable<GrupoMultimediaResponse> {
-    return this.http.delete<GrupoMultimediaResponse>(`${this.apiUrl}/${id}`);
+    return this.http.delete<GrupoMultimediaResponse>(`${this.apiUrl}/${id}`)
+      .pipe(
+        tap(response => console.log('Delete grupo multimedia response:', response)),
+        catchError(this.handleError)
+      );
   }
 }

@@ -75,38 +75,40 @@ const crearGrupoMultimedia = async (req, res = response) => {
     });
   }
 
-  body.nombre = body.nombre.toUpperCase();
-
   try {
-    //Verifica si la categoria existe
-    const grupomultimediaDB = await GrupoMultimedia.findOne({
-      nombre: body.nombre,
-    });
+    // Convertir a mayúsculas
+    const nombre = body.nombre.toUpperCase();
+
+    // Verificar si el grupo ya existe
+    const grupomultimediaDB = await GrupoMultimedia.findOne({ nombre });
 
     if (grupomultimediaDB) {
       return res.status(400).json({
         Ok: false,
-        msg: `El grupomultimedia ${body.nombre}, ya existe`,
+        msg: `El grupo multimedia ${nombre} ya existe`
       });
-    }    //Pasa a mayuscula el dato de la categoria
-    const nombre = req.body.nombre.toUpperCase();
+    }
 
     // Generar la data a guardar
     const data = {
       nombre,
-      fecha_actualizacion: null,
+      fecha_actualizacion: null
     };
 
     const grupomultimedia = new GrupoMultimedia(data);
 
-    // Guardar DB
+    // Guardar en la base de datos
     await grupomultimedia.save();
 
     console.log('Grupo multimedia created successfully:', grupomultimedia);
     res.status(201).json({ Ok: true, resp: grupomultimedia });
   } catch (error) {
     console.error('Error in crearGrupoMultimedia:', error);
-    res.status(500).json({ Ok: false, msg: 'Error al crear grupo multimedia', resp: error.message });
+    res.status(500).json({ 
+      Ok: false, 
+      msg: 'Error al crear grupo multimedia', 
+      resp: error.message 
+    });
   }
 };
 

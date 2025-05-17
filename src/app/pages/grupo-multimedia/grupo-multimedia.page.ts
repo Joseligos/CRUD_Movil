@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { GrupoMultimediaListComponent } from '../../components/grupo-multimedia-list/grupo-multimedia-list.component';
-import { IonContent, IonHeader, IonToolbar, IonTitle, IonButtons, IonButton, IonIcon } from '@ionic/angular/standalone';
+import { IonContent, IonHeader, IonToolbar, IonTitle, IonButtons, IonButton, IonIcon, IonFab } from '@ionic/angular/standalone';
+import { RouterModule } from '@angular/router';
+import { addIcons } from 'ionicons';
+import { add } from 'ionicons/icons';
 
 @Component({
   selector: 'app-grupo-multimedia',
@@ -11,18 +14,22 @@ import { IonContent, IonHeader, IonToolbar, IonTitle, IonButtons, IonButton, Ion
   imports: [
     CommonModule, 
     GrupoMultimediaListComponent,
+    RouterModule,
     IonContent,
     IonHeader,
     IonToolbar,
     IonTitle,
     IonButtons,
     IonButton,
-    IonIcon
+    IonIcon,
+    IonFab
   ]
 })
 export class GrupoMultimediaPage implements OnInit {
 
-  constructor() { }
+  constructor() {
+    addIcons({ add });
+  }
 
   ngOnInit() {
   }

@@ -73,8 +73,7 @@ export class GrupoMultimediaEditComponent implements OnInit {
       }
     });
   }
-  
-  async onSubmit() {
+    async onSubmit() {
     this.submitted = true;
     
     if (this.grupoForm.invalid) {
@@ -90,20 +89,21 @@ export class GrupoMultimediaEditComponent implements OnInit {
       nombre: this.grupoForm.value.nombre
     };
     
+    console.log('Enviando datos:', this.isEdit ? 'UPDATE' : 'CREATE', grupoData);
+    
     if (this.isEdit) {
       this.grupoService.updateGrupoMultimedia(this.grupoId, grupoData).subscribe({
         next: (resp) => {
           loading.dismiss();
           if (resp.Ok) {
             this.presentToast('Grupo multimedia actualizado correctamente');
-            this.router.navigate(['/grupo-multimedia']);
+            this.router.navigate(['/tabs/tab5']);
           } else {
             this.presentToast('Error al actualizar el grupo multimedia');
           }
-        },
-        error: (err) => {
+        },        error: (err) => {
           loading.dismiss();
-          console.error(err);
+          console.error('Error durante la actualización:', err);
           if (err.error && err.error.msg) {
             this.presentToast(err.error.msg);
           } else {
@@ -115,16 +115,17 @@ export class GrupoMultimediaEditComponent implements OnInit {
       this.grupoService.createGrupoMultimedia(grupoData).subscribe({
         next: (resp) => {
           loading.dismiss();
+          console.log('Respuesta creación:', resp);
           if (resp.Ok) {
             this.presentToast('Grupo multimedia creado correctamente');
-            this.router.navigate(['/grupo-multimedia']);
+            this.router.navigate(['/tabs/tab5']);
           } else {
             this.presentToast('Error al crear el grupo multimedia');
           }
         },
         error: (err) => {
           loading.dismiss();
-          console.error(err);
+          console.error('Error durante la creación:', err);
           if (err.error && err.error.msg) {
             this.presentToast(err.error.msg);
           } else {

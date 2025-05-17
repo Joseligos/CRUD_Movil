@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar color="primary">
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/grupo-multimedia"></ion-back-button>
+      <ion-back-button defaultHref="/tabs/tab5"></ion-back-button>
     </ion-buttons>
     <ion-title>{{ isEdit ? 'Editar' : 'Nuevo' }} Grupo Multimedia</ion-title>
   </ion-toolbar>
@@ -22,7 +22,7 @@
       <ion-button expand="block" type="submit" [disabled]="grupoForm.invalid && submitted">
         {{ isEdit ? 'Actualizar' : 'Crear' }} Grupo
       </ion-button>
-      <ion-button expand="block" fill="outline" routerLink="/grupo-multimedia" class="ion-margin-top">
+      <ion-button expand="block" fill="outline" routerLink="/tabs/tab5" class="ion-margin-top">
         Cancelar
       </ion-button>
     </div>
