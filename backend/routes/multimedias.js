@@ -22,22 +22,11 @@ const router = Router();
 //  Obtener todas las Multimedias - publico
 router.get('/', obtenerMultimedias );
 
-
-// Obtener una Multimedia por id - publico
-router.get('/:id',[
-    check('id', 'No es un id de Mongo válido').isMongoId(),
-    check('id').custom( existeMultimediaPorId ),
-    validarCampos,
-], obtenerMultimedia );
-
 router.get('/grupomultimedia/:id',[
     check('id', 'No es un id de Mongo válido').isMongoId(),
     check('id').custom( existeGrupoMultimediaPorId ),
     validarCampos,
 ], obtenerMultimediasXGrupoMultimedia );
-
-
-
 
 router.get('/heroe/:id',[
     check('id', 'No es un id de Mongo válido').isMongoId(),
@@ -50,6 +39,13 @@ router.get('/fotos/:id',[
     //check('id').custom( existeGrupoMultimediaPorId ),
     validarCampos,
 ], obtenerFotosXIdHeroe);
+
+// Obtener una Multimedia por id - publico
+router.get('/:id',[
+    check('id', 'No es un id de Mongo válido').isMongoId(),
+    check('id').custom( existeMultimediaPorId ),
+    validarCampos,
+], obtenerMultimedia );
 
 
 // Crear Multimedia - privado - cualquier persona con un token válido

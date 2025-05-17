@@ -7,10 +7,6 @@ import { AppComponent } from './app/app.component';
 import { provideHttpClient } from '@angular/common/http';
 import { importProvidersFrom } from '@angular/core';
 
-
-import { IonicModule } from '@ionic/angular';
-
-
 bootstrapApplication(AppComponent, {
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
@@ -19,11 +15,5 @@ bootstrapApplication(AppComponent, {
 
     //Http Client  
     provideHttpClient(),
-
-    //Importar estas dos librerias para los proyecto Standalone
-    importProvidersFrom(IonicModule.forRoot(), 
-    //FormsModule
-    )
-
   ],
 });

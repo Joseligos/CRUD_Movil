@@ -14,7 +14,7 @@ const router = Router();
 
 
 /**
- * {{url}}/api/GrupoMultimedias
+ * {{url}}/api/grupomultimedias
  */
 
 //  Obtener todas las GrupoMultimedias - publico
@@ -48,7 +48,6 @@ router.delete('/:id',[
     check('id').custom( existeGrupoMultimediaPorId ),
     validarCampos,
 ],borrarGrupoMultimedia);
-
 
 
 module.exports = router;

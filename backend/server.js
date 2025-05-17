@@ -11,6 +11,15 @@ app.listen(PORT, () => {
 app.use(cors())
 app.use(express.json())
 
+// Request logger middleware
+app.use((req, res, next) => {
+    console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
+    if (req.method === 'POST' || req.method === 'PUT') {
+        console.log('Request body:', JSON.stringify(req.body));
+    }
+    next();
+})
+
 mongoose.connect("mongodb+srv://joseligo:JuanJose142006@db.7jvy7.mongodb.net/Heroes", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -21,7 +30,8 @@ app.get('/', (req, res) => {
     res.send('¡Servidor funcionando correctamente!');
 });
 
-app.use('/api', require('./routes/heroes'));
-app.use('/api', require('./routes/multimedias'));
-app.use('/api', require('./routes/multimediasheroe'));
-app.use('/api', require('./routes/grupomultimedias'));
+// Mount routes properly
+app.use('/api/heroes', require('./routes/heroes'));
+app.use('/api/multimedias', require('./routes/multimedias'));
+app.use('/api/multimediasheroe', require('./routes/multimediasheroe'));
+app.use('/api/grupomultimedias', require('./routes/grupomultimedias'));
