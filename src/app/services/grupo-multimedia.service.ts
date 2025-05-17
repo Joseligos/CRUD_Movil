@@ -8,7 +8,7 @@ import { URL_BACKEND } from '../config/url.servicios';
   providedIn: 'root'
 })
 export class GrupoMultimediaService {
-  private apiUrl = `${URL_BACKEND}/grupomultimedias`;
+  private apiUrl = `${URL_BACKEND}/grupomultimedias/grupomultimedias`;
   constructor(private http: HttpClient) { 
     console.log('API URL:', this.apiUrl);
   }

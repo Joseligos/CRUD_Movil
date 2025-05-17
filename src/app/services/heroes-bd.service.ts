@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { URL_HEROES } from '../config/url.servicios';
+import { URL_BACKEND } from '../config/url.servicios';
 import { map } from 'rxjs';
 import { Heroe } from '../interfaces/heroes.interface';
 
@@ -12,7 +12,7 @@ export class HeroesBDService {
   constructor(private http: HttpClient) { }
 
   getHeroes(): any {
-    let url = `${URL_HEROES}/heroes`;
+    let url = `${URL_BACKEND}/heroes/heroes`;
 
 
     return this.http.get(url).pipe(
@@ -24,7 +24,7 @@ export class HeroesBDService {
   }
 
   getUnHeroe(unHeroe:string):any{
-    let url = `${URL_HEROES}/heroes/${unHeroe}`;
+    let url = `${URL_BACKEND}/heroes/heroes/${unHeroe}`;
 
 
     return this.http.get(url, {}).pipe(
@@ -41,7 +41,7 @@ export class HeroesBDService {
 
     if (unaAccion === 'eliminar') {
 
-      let url = `${URL_HEROES}/heroes/${unHeroe._id}`;
+      let url = `${URL_BACKEND}/heroes/heroes/${unHeroe._id}`;
 
       return this.http.delete(url).pipe(
         map((data) => {
@@ -59,7 +59,7 @@ export class HeroesBDService {
     _id?: string;
     */
     if (unaAccion === 'insertar') {
-      let url = `${URL_HEROES}/heroes`;
+      let url = `${URL_BACKEND}/heroes/heroes`;
 
       const body = {
         nombre:unHeroe.nombre,
@@ -76,7 +76,7 @@ export class HeroesBDService {
 
     if (unaAccion === 'modificar') {
 
-      let url = `${URL_HEROES}/heroes/${unHeroe._id}`;
+      let url = `${URL_BACKEND}/heroes/heroes/${unHeroe._id}`;
 
 
       const body = {
