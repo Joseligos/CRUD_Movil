@@ -18,18 +18,18 @@ const router = Router();
  */
 
 //  Obtener todas las GrupoMultimedias - publico
-router.get('/', obtenerGrupoMultimedias );
+router.get('/grupomultimedias', obtenerGrupoMultimedias );
 
 
 // Obtener una GrupoMultimedia por id - publico
-router.get('/:id',[
+router.get('/grupomultimedias/:id',[
     check('id', 'No es un id de Mongo válido').isMongoId(),
     check('id').custom( existeGrupoMultimediaPorId ),
     validarCampos,
 ], obtenerGrupoMultimedia );
 
 // Crear GrupoMultimedia - privado - cualquier persona con un token válido
-router.post('/', [ 
+router.post('/grupomultimedias', [ 
     check('nombre','El nombre es obligatorio').not().isEmpty(),
     validarCampos
 ], crearGrupoMultimedia );
@@ -43,7 +43,7 @@ router.put('/:id',[
 ],actualizarGrupoMultimedia );
 
 // Borrar una GrupoMultimedia - Admin
-router.delete('/:id',[
+router.delete('/grupomultimedias/:id',[
     check('id', 'No es un id de Mongo válido').isMongoId(),
     check('id').custom( existeGrupoMultimediaPorId ),
     validarCampos,

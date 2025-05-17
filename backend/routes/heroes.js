@@ -13,25 +13,25 @@ const { existeHeroePorId } = require('../helpers/db-validators');
 const router = Router();
 
 //  Obtener todas las Opciones - publico
-router.get('/', obtenerHeroes );
+router.get('/heroes', obtenerHeroes );
 
 
 // Obtener una Opcion por id - publico
-router.get('/:id',[
+router.get('/heroes/:id',[
     check('id', 'No es un id de Mongo válido').isMongoId(),
     check('id').custom( existeHeroePorId ),
     validarCampos,
 ], obtenerHeroe );
 
 // Crear Opcion - privado - cualquier persona con un token válido
-router.post('/', [ 
+router.post('/heroes', [ 
     //validarJWT,
     check('nombre','El nombre del heroe es obligatorio').not().isEmpty(),
     validarCampos
 ], crearHeroe );
 
 // Actualizar Role- privado - cualquiera con token válido
-router.put('/:id',[
+router.put('/heroes/:id',[
     //validarJWT,
     check('id', 'No es un id de Mongo válido').isMongoId(),
     check('id').custom( existeHeroePorId ),
@@ -39,7 +39,7 @@ router.put('/:id',[
 ],actualizarHeroe );
 
 // Borrar un Role - Admin
-router.delete('/:id',[
+router.delete('/heroes/:id',[
     //validarJWT,
     //esAdminRole,
     check('id', 'No es un id de Mongo válido').isMongoId(),
