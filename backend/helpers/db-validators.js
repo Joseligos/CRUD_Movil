@@ -1,3 +1,4 @@
+const { Heroe, GrupoMultimedia, Multimedia, MultimediaHeroe } = require('../models');
 /**
  * Heroe
  */

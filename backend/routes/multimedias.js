@@ -20,7 +20,7 @@ const router = Router();
  */
 
 //  Obtener todas las Multimedias - publico
-router.get('/', obtenerMultimedias );
+router.get('/multimedias', obtenerMultimedias );
 
 
 // Obtener una Multimedia por id - publico
