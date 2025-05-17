@@ -8,7 +8,7 @@ import { Observable, catchError, tap, throwError } from 'rxjs';
   providedIn: 'root'
 })
 export class MultimediaService {
-  private apiUrl = `${URL_BACKEND}/multimedias`;
+  private apiUrl = `${URL_BACKEND}/multimedias/multimedias`;
   
   constructor(private http: HttpClient) {
     console.log('API URL:', this.apiUrl);
