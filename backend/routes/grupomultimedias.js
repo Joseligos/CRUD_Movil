@@ -35,7 +35,7 @@ router.post('/grupomultimedias', [
 ], crearGrupoMultimedia );
 
 // Actualizar - privado - cualquiera con token válido
-router.put('/:id',[
+router.put('/grupomultimedias/:id',[
     check('nombre','El nombre es obligatorio').not().isEmpty(),
     check('id', 'No es un id de Mongo válido').isMongoId(),
     check('id').custom( existeGrupoMultimediaPorId ),
