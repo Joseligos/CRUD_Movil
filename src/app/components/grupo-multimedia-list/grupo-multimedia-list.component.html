@@ -16,21 +16,30 @@
   <div *ngIf="loading" class="ion-padding ion-text-center">
     <p>Cargando grupos...</p>
   </div>
-  
-  <ion-list *ngIf="!loading && grupos.length > 0">
-    <ion-item-sliding *ngFor="let grupo of grupos">      <ion-item detail [routerLink]="['/grupo-multimedia/' + grupo._id + '/edit']">
+    <ion-list *ngIf="!loading && grupos.length > 0">
+    <ion-item-sliding *ngFor="let grupo of grupos">      
+      <ion-item>
         <ion-label>
           <h2>{{ grupo.nombre }}</h2>
           <p>ID: {{ grupo._id }}</p>
           <p *ngIf="grupo.fecha_creacion">Creado: {{ grupo.fecha_creacion | date:'shortDate' }}</p>
         </ion-label>
+        <ion-buttons slot="end">          <ion-button color="primary" [routerLink]="['/grupo-multimedia/' + grupo._id + '/edit']" title="Editar grupo">
+            <ion-icon name="create-outline" slot="icon-only"></ion-icon>
+          </ion-button>
+          <ion-button color="danger" (click)="deleteGrupo(grupo._id || '', grupo.nombre)" title="Eliminar grupo">
+            <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+          </ion-button>
+        </ion-buttons>
       </ion-item>
         <ion-item-options side="end">
         <ion-item-option color="primary" [routerLink]="['/grupo-multimedia/' + grupo._id + '/edit']">
-          <ion-icon name="create-outline" slot="icon-only"></ion-icon>
-        </ion-item-option>        <ion-item-option color="danger" (click)="deleteGrupo(grupo._id || '')">
-          <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
-          <div>Eliminar</div>
+          <ion-icon name="create-outline" slot="start"></ion-icon>
+          Editar
+        </ion-item-option>
+        <ion-item-option color="danger" (click)="deleteGrupo(grupo._id || '', grupo.nombre)">
+          <ion-icon name="trash-outline" slot="start"></ion-icon>
+          Eliminar
         </ion-item-option>
       </ion-item-options>
     </ion-item-sliding>

@@ -65,11 +65,10 @@ export class GrupoMultimediaListComponent implements OnInit {
       }
     });
   }
-  
-  async deleteGrupo(id: string) {
+    async deleteGrupo(id: string, nombre: string) {
     const alert = await this.alertCtrl.create({
       header: 'Confirmar eliminación',
-      message: '¿Está seguro que desea eliminar este grupo multimedia?',
+      message: `¿Está seguro que desea eliminar el grupo "${nombre}"?`,
       buttons: [
         {
           text: 'Cancelar',
@@ -92,7 +91,7 @@ export class GrupoMultimediaListComponent implements OnInit {
     });
     await loading.present();
     
-    console.log(`Deleting grupo multimedia with ID: ${id}`);
+    console.log('Deleting grupo multimedia with ID:', id);
     this.grupoService.deleteGrupoMultimedia(id).subscribe({
       next: (resp) => {
         loading.dismiss();
@@ -111,8 +110,8 @@ export class GrupoMultimediaListComponent implements OnInit {
       error: (err) => {
         loading.dismiss();
         console.error('Error durante la eliminación:', err);
-        
         let errorMsg = 'Error al eliminar el grupo multimedia';
+        
         if (err.error) {
           if (err.error.msg) {
             errorMsg += `: ${err.error.msg}`;

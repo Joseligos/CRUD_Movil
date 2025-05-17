@@ -72,7 +72,7 @@ export class GrupoMultimediaService {
    * Elimina un grupo multimedia (cambio de estado a false)
    */
   deleteGrupoMultimedia(id: string): Observable<GrupoMultimediaResponse> {
-    console.log(`Deleting grupo multimedia with ID ${id}`);
+    console.log(`Deleting grupo multimedia with ID: ${id}`);
     return this.http.delete<GrupoMultimediaResponse>(`${this.apiUrl}/${id}`)
       .pipe(
         tap(response => console.log('Delete grupo multimedia response:', response)),

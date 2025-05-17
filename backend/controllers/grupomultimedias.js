@@ -217,7 +217,7 @@ const borrarGrupoMultimedia = async (req, res = response) => {
         resp: `El ID ${id} no es un ObjectId válido de MongoDB`
       });
     }
-    
+
     // Verificar si el grupo multimedia existe
     const grupoExistente = await GrupoMultimedia.findById(id);
     if (!grupoExistente) {
@@ -227,18 +227,18 @@ const borrarGrupoMultimedia = async (req, res = response) => {
       });
     }
     
-    // Actualizar el estado a false (borrado lógico) y agregar fecha de actualización
+    // Marcar como inactivo (borrado lógico)
     const grupomultimediaBorrada = await GrupoMultimedia.findByIdAndUpdate(
       id,
       { estado: false, fecha_actualizacion: new Date() },
       { new: true }
     );
-    
+
     console.log('Grupo multimedia deleted successfully:', grupomultimediaBorrada);
-    return res.json({ Ok: true, resp: grupomultimediaBorrada });
+    res.json({ Ok: true, resp: grupomultimediaBorrada });
   } catch (error) {
     console.error('Error in borrarGrupoMultimedia:', error);
-    return res.status(500).json({ 
+    res.status(500).json({ 
       Ok: false, 
       msg: 'Error al eliminar el grupo multimedia', 
       resp: error.message 
