@@ -27,7 +27,7 @@ router.get('/multimedias', (req, res, next) => {
     next();
 }, obtenerMultimedias );
 
-router.get('/multimedias/grupomultimedia/:id',[
+router.get('/grupomultimedia/:id',[
     check('id', 'No es un id de Mongo válido').isMongoId(),
     check('id').custom( existeGrupoMultimediaPorId ),
     validarCampos,

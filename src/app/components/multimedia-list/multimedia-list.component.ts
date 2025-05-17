@@ -86,9 +86,10 @@ export class MultimediaListComponent implements OnInit {
     });
   }
   
-  getGrupoNombre(grupoId: string): string {
-    const grupo = this.grupos.find(g => g._id === grupoId);
-    return grupo ? grupo.nombre : grupoId;
+  getGrupoNombre(grupo: any): string {
+    const grupoId = typeof grupo === 'string' ? grupo : grupo?._id;
+    const encontrado = this.grupos.find(g => g._id === grupoId);
+    return encontrado ? encontrado.nombre : (grupo?.nombre || grupoId || 'Desconocido');
   }
   
   async deleteMultimedia(id: string, url: string) {
