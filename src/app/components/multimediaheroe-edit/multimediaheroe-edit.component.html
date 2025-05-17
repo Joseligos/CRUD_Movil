@@ -1,0 +1,37 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/multimediaheroe"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ isNew ? 'Nueva Asociación' : 'Editar Asociación' }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item>
+      <ion-label position="stacked">Héroe</ion-label>
+      <ion-select [(ngModel)]="multimediaHeroe.IdHeroe" placeholder="Seleccione un héroe">
+        <ion-select-option *ngFor="let heroe of heroes" [value]="heroe._id">
+          {{ heroe.nombre }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+    
+    <ion-item>
+      <ion-label position="stacked">Multimedia</ion-label>
+      <ion-select [(ngModel)]="multimediaHeroe.IdMultimedia" placeholder="Seleccione una multimedia">
+        <ion-select-option *ngFor="let multimedia of multimedias" [value]="multimedia._id">
+          {{ multimedia.url }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+  </ion-list>
+  
+  <div style="padding: 16px;">
+    <ion-button expand="block" (click)="saveMultimediaHeroe()">
+      <ion-icon name="save" slot="start"></ion-icon>
+      {{ isNew ? 'Crear' : 'Actualizar' }}
+    </ion-button>
+  </div>
+</ion-content>

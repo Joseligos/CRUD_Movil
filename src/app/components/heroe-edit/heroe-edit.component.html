@@ -11,6 +11,46 @@
     <ion-card-content> <strong>Bio:</strong> {{ heroe.bio }} </ion-card-content>
     <ion-card-content> <strong>Casa:</strong>{{ heroe.casa }} </ion-card-content>
   </ion-card>
+  
+  <!-- Multimedia Section -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Galería multimedia</ion-card-title>
+    </ion-card-header>
+    
+    <ion-card-content>      @if (loadingMultimedia) {
+        <div class="ion-text-center">
+          <ion-spinner name="crescent"></ion-spinner>
+          <p>Cargando multimedia...</p>
+        </div>
+      } @else if (!multimediaItems || multimediaItems.length === 0) {
+        <div class="ion-text-center">
+          <p>No hay elementos multimedia asociados a este héroe.</p>
+          @if (lastMultimediaError) {
+            <p class="error-message">{{ lastMultimediaError }}</p>
+          }
+        </div>
+      } @else {<!-- Multimedia Slider/Carousel -->
+        <div class="multimedia-container">
+          <p *ngIf="multimediaItems.length > 0" class="ion-text-center">
+            Mostrando {{ multimediaItems.length }} elemento(s) multimedia
+          </p>
+          
+          <swiper-container pagination="true" navigation="true" slides-per-view="1" space-between="10">
+            @for (item of multimediaItems; track item._id) {
+              <swiper-slide>
+                <div class="slide-container">
+                  <img [src]="getMultimediaUrl(item)" alt="Multimedia del héroe" 
+                      onerror="this.src='assets/icon/no-image.png'; this.onerror=null;">
+                  <p *ngIf="item.description" class="slide-description">{{item.description}}</p>
+                </div>
+              </swiper-slide>
+            }
+          </swiper-container>
+        </div>
+      }
+    </ion-card-content>
+  </ion-card>
   }
   
   @if (accion !== 'visualizar') {

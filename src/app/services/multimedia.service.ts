@@ -9,7 +9,6 @@ import { Observable, catchError, tap, throwError } from 'rxjs';
 })
 export class MultimediaService {
   private apiUrl = `${URL_BACKEND}/multimedias/multimedias`;
-  
   constructor(private http: HttpClient) {
     console.log('API URL:', this.apiUrl);
   }
@@ -17,12 +16,10 @@ export class MultimediaService {
   private handleError(error: HttpErrorResponse) {
     console.error('API Error:', error);
     return throwError(() => error);
-  }
-    /**
+  }    /**
    * Obtiene todas las multimedias con paginación
-   */
-  getMultimedias(limite: number = 10, desde: number = 0): Observable<MultimediaResponse> {
-    // Fix the URL path by removing any potential double slashes
+   */  getMultimedias(limite: number = 10, desde: number = 0): Observable<MultimediaResponse> {
+    // Fix the URL path to avoid redundancy
     const url = `${this.apiUrl}?limite=${limite}&desde=${desde}`;
     console.log('Calling URL for getMultimedias:', url);
     
@@ -35,7 +32,6 @@ export class MultimediaService {
         })
       );
   }
-  
   /**
    * Obtiene una multimedia por su ID
    */
@@ -45,8 +41,7 @@ export class MultimediaService {
         tap(response => console.log('Get multimedia response:', response)),
         catchError(this.handleError)
       );
-  }
-  /**
+  }  /**
    * Obtiene multimedias por grupo multimedia
    */
   getMultimediasByGrupo(grupoId: string): Observable<MultimediaResponse> {
@@ -61,8 +56,7 @@ export class MultimediaService {
           return this.handleError(error);
         })
       );
-  }
-    /**
+  }    /**
    * Crea una nueva multimedia
    */
   createMultimedia(multimedia: Multimedia): Observable<MultimediaResponse> {
@@ -79,7 +73,6 @@ export class MultimediaService {
         })
       );
   }
-  
   /**
    * Actualiza una multimedia existente
    */
@@ -97,8 +90,7 @@ export class MultimediaService {
           return this.handleError(error);
         })
       );
-  }
-  /**
+  }  /**
    * Elimina una multimedia (cambio de estado a false)
    */
   deleteMultimedia(id: string): Observable<MultimediaResponse> {

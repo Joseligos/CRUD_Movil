@@ -33,6 +33,28 @@ const obtenerMultimediasPorHeroe = async (req, res = response) => {
     }
   };
 
+// Método para obtener todos los registros
+const obtenerMultimediasHeroes = async (req, res = response) => {
+  const { limite = 10, desde = 0 } = req.query;
+  const query = {};
+
+  try {
+    const [total, multimediasHeroe] = await Promise.all([
+      MultimediaHeroe.countDocuments(query),
+      MultimediaHeroe.find(query)
+        .populate("IdMultimedia", "url")
+        .populate("IdHeroe", "nombre")
+        .skip(Number(desde))
+        .limit(Number(limite)),
+    ]);
+
+    res.json({ Ok: true, total, resp: multimediasHeroe });
+  } catch (error) {
+    console.error('Error en obtenerMultimediasHeroes:', error);
+    res.status(500).json({ Ok: false, msg: "Error al obtener multimedias heroes", error });
+  }
+};
+
 
 const crearMultimediaHeroe = async (req, res = response) => {
     const { estado, ...body } = req.body;
@@ -71,7 +93,7 @@ const actualizarMultimediaHeroe = async (req, res = response) => {
 
         //Verifica que la URL existe
         //const multimediaHeroeDB = await Multimedia.findOne({ url: data.url });
-        const multimediaHeroeDB = await MultimediaHeroe.findOne({ IdHeroe: body.IdHeroe, IdMultimedia: body.IdMultimedia });
+        const multimediaHeroeDB = await MultimediaHeroe.findOne({ IdHeroe: data.IdHeroe, IdMultimedia: data.IdMultimedia });
 
         if (multimediaHeroeDB) {
             return res.status(400).json({
@@ -160,11 +182,10 @@ const borrarMultimediaHeroe = async (req, res = response) => {
 };
 
 module.exports = {
-
     obtenerMultimediaHeroe,
     crearMultimediaHeroe,
     actualizarMultimediaHeroe,
     borrarMultimediaHeroe,
-    obtenerMultimediasPorHeroe
-
+    obtenerMultimediasPorHeroe,
+    obtenerMultimediasHeroes
 };

@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
   IonContent, IonHeader, IonTitle, IonToolbar,
-  IonButtons,
-  IonBackButton,
+  IonButtons, IonBackButton, IonSpinner, IonCard,
+  IonCardHeader, IonCardTitle, IonCardContent
 } from '@ionic/angular/standalone';
 import { Heroe } from 'src/app/interfaces/heroes.interface';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -17,17 +17,20 @@ import { HeroeEditComponent } from 'src/app/components/heroe-edit/heroe-edit.com
   selector: 'app-heroe',
   templateUrl: './heroe.page.html',
   styleUrls: ['./heroe.page.scss'],
-  standalone: true,
-  imports: [
+  standalone: true,  imports: [
     IonBackButton,
     IonButtons,
     IonContent,
     IonHeader,
     IonTitle,
     IonToolbar,
+    IonSpinner,
+    IonCard,
+    IonCardHeader,
+    IonCardTitle,
+    IonCardContent,
     CommonModule,
     FormsModule,
-  
     HeroeEditComponent
   ]
 })
@@ -74,18 +77,20 @@ export class HeroePage implements OnInit {
 
   ngOnInit() {
   }
-
   async cargarUnHeroe() {
-    await this.bd
-      .getUnHeroe(this.id)
-      .toPromise()
-      .then((data: any) => {
-        //Aqui se realiza la asignacion de los personajes de la respuesta
+    try {
+      console.log('Loading hero data for ID:', this.id);
+      const data: any = await this.bd.getUnHeroe(this.id).toPromise();
+      
+      if (data && data.resp) {
         this.heroe = data.resp;
-
-        console.log("MIHeroePAGE", this.heroe);
-
-      });
+        console.log("Hero loaded successfully:", this.heroe);
+      } else {
+        console.error("Error loading hero data:", data);
+      }
+    } catch (error) {
+      console.error("Error loading hero:", error);
+    }
   }
 
 

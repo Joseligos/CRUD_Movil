@@ -7,20 +7,16 @@ const { obtenerMultimediaHeroe,
         crearMultimediaHeroe,
         actualizarMultimediaHeroe, 
         obtenerMultimediasPorHeroe,
+        obtenerMultimediasHeroes,
         borrarMultimediaHeroe } = require('../controllers/multimediasHeroe');
 const { existeMultimediaPorId,existeHeroePorId,existeMultimediaHeroePorId } = require('../helpers/db-validators');
 
 const router = Router();
 
+// Ruta para obtener todos los registros
+router.get('/multimediasheroe', obtenerMultimediaHeroe);
 
-router.get('/:id',[
-    //validarJWT,
-    //check('nombre','El nombre es obligatorio').not().isEmpty(),
-    check('id', 'No es un id de Mongo válido').isMongoId(),
-    check('id').custom( existeMultimediaHeroePorId ),
-    validarCampos
-],obtenerMultimediaHeroe );
-
+// Rutas específicas primero
 router.get('/heroe/:id',[
     //validarJWT,
     //check('nombre','El nombre es obligatorio').not().isEmpty(),
@@ -29,6 +25,13 @@ router.get('/heroe/:id',[
     //validarCampos
 ],obtenerMultimediasPorHeroe );
 
+// Ruta genérica después
+//router.get('/:id',[
+    //validarJWT,
+    //check('nombre','El nombre es obligatorio').not().isEmpty(),
+//    check('id', 'No es un id de Mongo válido').isMongoId(),
+//    check('id').custom( existeMultimediaHeroePorId ),    validarCampos
+//],obtenerMultimediaHeroe );
 
 // Crear Multimedia - privado - cualquier persona con un token válido
 router.post('/', [ 

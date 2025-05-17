@@ -1,33 +1,88 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { URL_HEROES } from '../config/url.servicios';
+import { URL_BACKEND } from '../config/url.servicios';
 import { MultimediaHeroe } from '../interfaces/multimediaheroe.interface';
-import { map } from 'rxjs';
+import { Observable, catchError, map, tap, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class MultimediaHeroeService {
-
-  constructor(private http: HttpClient) { }
-
-  getMultimediaHeroe() {
-    return this.http.get(`${URL_HEROES}/multimediaheroes`).pipe(map(data => data));
+export class MultimediaHeroeService {  private apiUrl = `${URL_BACKEND}/multimediasheroe`;
+  
+  constructor(private http: HttpClient) {
+    console.log('MultimediaHeroe API URL:', this.apiUrl);
+  }
+  
+  private handleError(error: HttpErrorResponse) {
+    console.error('API Error:', error);
+    return throwError(() => error);
+  }
+    getMultimediaHeroe(): Observable<any> {
+    const url = `${this.apiUrl}/multimediasheroe`;
+    console.log('Calling URL for getMultimediaHeroe:', url);
+    return this.http.get(url).pipe(
+      tap(response => console.log('API Response from getMultimediaHeroe:', response)),
+      catchError(this.handleError)
+    );
+  }
+  getMultimediaHeroePorId(id: string): Observable<any> {
+    const url = `${this.apiUrl}/${id}`;
+    console.log('Calling URL for getMultimediaHeroePorId:', url);
+    return this.http.get(url).pipe(
+      tap(response => console.log('API Response from getMultimediaHeroePorId:', response)),
+      catchError(this.handleError)
+    );
+  }
+    getMultimediasPorHeroe(heroeId: string): Observable<any> {
+    const url = `${this.apiUrl}/heroe/${heroeId}`;
+    console.log('Calling URL for getMultimediasPorHeroe:', url);
+    
+    return this.http.get(url).pipe(
+      tap(response => {
+        console.log('API Response from getMultimediasPorHeroe:', response);
+        
+        // Additional debug for response structure
+        if (response && (response as any).resp) {
+          const items = (response as any).resp;
+          console.log(`Received ${Array.isArray(items) ? items.length : 0} multimedia items for hero ${heroeId}`);
+          
+          if (Array.isArray(items) && items.length > 0) {
+            console.log('First item example:', items[0]);
+          }
+        }
+      }),
+      catchError(error => {
+        console.error(`Error fetching multimedia for hero ${heroeId}:`, error);
+        return this.handleError(error);
+      })
+    );
   }
 
-  getMultimediaHeroePorId(id: string) {
-    return this.http.get(`${URL_HEROES}/multimediaheroes/${id}`).pipe(map(data => data));
+  crearMultimediaHeroe(mh: MultimediaHeroe): Observable<any> {
+    console.log('Calling URL for crearMultimediaHeroe:', this.apiUrl);
+    console.log('Payload:', mh);
+    return this.http.post(this.apiUrl, mh).pipe(
+      tap(response => console.log('API Response from crearMultimediaHeroe:', response)),
+      catchError(this.handleError)
+    );
   }
 
-  crearMultimediaHeroe(mh: MultimediaHeroe) {
-    return this.http.post(`${URL_HEROES}/multimediaheroes`, mh).pipe(map(data => data));
+  actualizarMultimediaHeroe(mh: MultimediaHeroe): Observable<any> {
+    const url = `${this.apiUrl}/${mh._id}`;
+    console.log('Calling URL for actualizarMultimediaHeroe:', url);
+    console.log('Payload:', mh);
+    return this.http.put(url, mh).pipe(
+      tap(response => console.log('API Response from actualizarMultimediaHeroe:', response)),
+      catchError(this.handleError)
+    );
   }
 
-  actualizarMultimediaHeroe(mh: MultimediaHeroe) {
-    return this.http.put(`${URL_HEROES}/multimediaheroes/${mh._id}`, mh).pipe(map(data => data));
-  }
-
-  eliminarMultimediaHeroe(id: string) {
-    return this.http.delete(`${URL_HEROES}/multimediaheroes/${id}`).pipe(map(data => data));
+  eliminarMultimediaHeroe(id: string): Observable<any> {
+    const url = `${this.apiUrl}/${id}`;
+    console.log('Calling URL for eliminarMultimediaHeroe:', url);
+    return this.http.delete(url).pipe(
+      tap(response => console.log('API Response from eliminarMultimediaHeroe:', response)),
+      catchError(this.handleError)
+    );
   }
 }
