@@ -4,10 +4,12 @@ const { isValidObjectId } = require("../helpers/mongo-verify");
 const { now } = require("mongoose");
 
 const obtenerMultimedias = async (req, res = response) => {
+  console.log('Controller: obtenerMultimedias executed');
   const { limite = 100, desde = 0 } = req.query;
   const query = { estado: true };
 
   try {
+    console.log('Executing query with params:', { query, limite, desde });
     const [total, multimedias] = await Promise.all([
       Multimedia.countDocuments(query),
       Multimedia.find(query)
@@ -16,9 +18,11 @@ const obtenerMultimedias = async (req, res = response) => {
         .limit(Number(limite)),
     ]);
 
+    console.log(`Found ${total} multimedia items`);
     res.json({ Ok: true, total: total, resp: multimedias });
   } catch (error) {
-    res.json({ Ok: false, resp: error });
+    console.error('Error in obtenerMultimedias:', error);
+    res.status(500).json({ Ok: false, msg: "Error al obtener multimedias", resp: error.message });
   }
 };
 

@@ -50,8 +50,7 @@ export class GrupoMultimediaService {
       );
   }  /**
    * Actualiza un grupo multimedia existente
-   */
-  updateGrupoMultimedia(id: string, grupo: GrupoMultimedia): Observable<GrupoMultimediaResponse> {
+   */  updateGrupoMultimedia(id: string, grupo: GrupoMultimedia): Observable<GrupoMultimediaResponse> {
     console.log(`Updating grupo multimedia with ID ${id}:`, grupo);
     
     // Asegurarse de que el objeto tiene el formato correcto
@@ -59,7 +58,11 @@ export class GrupoMultimediaService {
       nombre: grupo.nombre
     };
     
-    return this.http.put<GrupoMultimediaResponse>(`${this.apiUrl}/grupomultimedias/${id}`, payload)
+    // Debug URL
+    const url = `${this.apiUrl}/${id}`;
+    console.log('PUT request to URL:', url);
+    
+    return this.http.put<GrupoMultimediaResponse>(url, payload)
       .pipe(
         tap(response => console.log('Update grupo multimedia response:', response)),
         catchError(error => {

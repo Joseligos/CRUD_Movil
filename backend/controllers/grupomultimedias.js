@@ -157,12 +157,9 @@ const actualizarGrupoMultimedia = async (req, res = response) => {
           msg: `Ya existe un grupo multimedia con el nombre ${data.nombre}`
         });
       }
-    } else {
-      return res.status(400).json({
-        Ok: false,
-        msg: 'El nombre es obligatorio para actualizar'
-      });
-    }    // Agregar fecha de actualización
+    }
+
+    // Agregar fecha de actualización
     data.fecha_actualizacion = new Date();
 
     console.log('Data being sent to update:', data);

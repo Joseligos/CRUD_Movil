@@ -22,28 +22,37 @@ router.get('/', obtenerGrupoMultimedias );
 
 
 // Obtener una GrupoMultimedia por id - publico
-router.get('/grupomultimedias/:id',[
+router.get('/:id',[
     check('id', 'No es un id de Mongo válido').isMongoId(),
     check('id').custom( existeGrupoMultimediaPorId ),
     validarCampos,
 ], obtenerGrupoMultimedia );
 
 // Crear GrupoMultimedia - privado - cualquier persona con un token válido
-router.post('/grupomultimedias', [ 
+router.post('/', [ 
     check('nombre','El nombre es obligatorio').not().isEmpty(),
     validarCampos
 ], crearGrupoMultimedia );
 
 // Actualizar - privado - cualquiera con token válido
-router.put('/grupomultimedias/:id',[
-    check('nombre','El nombre es obligatorio').not().isEmpty(),
+router.put('/:id',[
+    // Make sure we log the received information
+    (req, res, next) => {
+        console.log('PUT request to /api/grupomultimedias/:id received');
+        console.log('URL:', req.originalUrl);
+        console.log('Params:', req.params);
+        console.log('Body:', req.body);
+        next();
+    },
+    // Remove the required check for name to allow partial updates
+    // check('nombre','El nombre es obligatorio').not().isEmpty(),
     check('id', 'No es un id de Mongo válido').isMongoId(),
     check('id').custom( existeGrupoMultimediaPorId ),
     validarCampos
 ],actualizarGrupoMultimedia );
 
 // Borrar una GrupoMultimedia - Admin
-router.delete('/grupomultimedias/:id',[
+router.delete('/:id',[
     check('id', 'No es un id de Mongo válido').isMongoId(),
     check('id').custom( existeGrupoMultimediaPorId ),
     validarCampos,

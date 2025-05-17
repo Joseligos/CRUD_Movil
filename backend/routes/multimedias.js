@@ -16,11 +16,16 @@ const { existeMultimediaPorId, existeGrupoMultimediaPorId } = require('../helper
 const router = Router();
 
 /**
- * {{url}}/api/Multimedias
+ * {{url}}/api/multimedias
  */
 
 //  Obtener todas las Multimedias - publico
-router.get('/multimedias', obtenerMultimedias );
+router.get('/', (req, res, next) => {
+    console.log('GET request to /api/multimedias received');
+    console.log('Query:', req.query);
+    console.log('URL:', req.originalUrl);
+    next();
+}, obtenerMultimedias );
 
 router.get('/grupomultimedia/:id',[
     check('id', 'No es un id de Mongo válido').isMongoId(),
@@ -49,7 +54,7 @@ router.get('/:id',[
 
 
 // Crear Multimedia - privado - cualquier persona con un token válido
-router.post('/multimedias', [ 
+router.post('/', [ 
     //validarJWT,
     check('url','La URL obligatoria').not().isEmpty(),
     check('IdGrupoMultimedia','No es un id de Mongo').isMongoId(),
@@ -58,7 +63,7 @@ router.post('/multimedias', [
 ], crearMultimedia );
 
 // Actualizar - privado - cualquiera con token válido
-router.put('/multimedias/:id',[
+router.put('/:id',[
     //validarJWT,
     //check('nombre','El nombre es obligatorio').not().isEmpty(),
     check('id', 'No es un id de Mongo válido').isMongoId(),
@@ -67,7 +72,7 @@ router.put('/multimedias/:id',[
 ],actualizarMultimedia );
 
 // Borrar una Multimedia - Admin
-router.delete('/multimedias/:id',[
+router.delete('/:id',[
     //validarJWT,
     //esAdminRole,
     check('id', 'No es un id de Mongo válido').isMongoId(),
