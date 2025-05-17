@@ -86,27 +86,42 @@ export class GrupoMultimediaListComponent implements OnInit {
     
     await alert.present();
   }
-  
-  async confirmDelete(id: string) {
+    async confirmDelete(id: string) {
     const loading = await this.loadingCtrl.create({
       message: 'Eliminando...'
     });
     await loading.present();
     
+    console.log(`Deleting grupo multimedia with ID: ${id}`);
     this.grupoService.deleteGrupoMultimedia(id).subscribe({
       next: (resp) => {
         loading.dismiss();
+        console.log('Delete response:', resp);
         if (resp.Ok) {
           this.presentToast('Grupo multimedia eliminado correctamente');
           this.loadGrupos();
         } else {
-          this.presentToast('Error al eliminar el grupo multimedia');
+          let errorMsg = 'Error al eliminar el grupo multimedia';
+          if (resp.resp && typeof resp.resp === 'string') {
+            errorMsg += `: ${resp.resp}`;
+          }
+          this.presentToast(errorMsg);
         }
       },
       error: (err) => {
         loading.dismiss();
-        console.error(err);
-        this.presentToast('Error al eliminar el grupo multimedia');
+        console.error('Error durante la eliminación:', err);
+        
+        let errorMsg = 'Error al eliminar el grupo multimedia';
+        if (err.error) {
+          if (err.error.msg) {
+            errorMsg += `: ${err.error.msg}`;
+          } else if (err.error.message) {
+            errorMsg += `: ${err.error.message}`;
+          }
+        }
+        
+        this.presentToast(errorMsg);
       }
     });
   }

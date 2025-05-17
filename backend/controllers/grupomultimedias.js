@@ -116,48 +116,133 @@ const actualizarGrupoMultimedia = async (req, res = response) => {
   const { id } = req.params;
   const { estado, usuario, ...data } = req.body;
 
+  console.log('actualizarGrupoMultimedia endpoint called');
+  console.log('ID:', id);
+  console.log('Request body:', req.body);
+  console.log('Data to update:', data);
+
   try {
-    //Verifica el cambio de Grupo Categoria
+    // Verificar si el ID es válido
+    if (!id.match(/^[0-9a-fA-F]{24}$/)) {
+      return res.status(400).json({ 
+        Ok: false, 
+        msg: 'ID no válido',
+        resp: `El ID ${id} no es un ObjectId válido de MongoDB`
+      });
+    }
+
+    // Verificar si el grupo multimedia existe
+    const grupoExistente = await GrupoMultimedia.findById(id);
+    if (!grupoExistente) {
+      return res.status(404).json({
+        Ok: false,
+        msg: `No se encontró un grupo multimedia con el ID ${id}`
+      });
+    }
+
+    // Si se actualiza el nombre, verificar que no exista otro grupo con ese nombre
     if (data.nombre) {
       data.nombre = data.nombre.toUpperCase();
+      console.log('Nombre normalizado:', data.nombre);
 
-      //Verifica si la categoria existe
+      // Verificar si existe otro grupo con el mismo nombre pero diferente ID
       const grupomultimediaDB = await GrupoMultimedia.findOne({
         nombre: data.nombre,
+        _id: { $ne: id } // Excluir el grupo actual
       });
 
       if (grupomultimediaDB) {
         return res.status(400).json({
-          msg: `La categoria ${data.nombre}, ya existe`,
+          Ok: false,
+          msg: `Ya existe un grupo multimedia con el nombre ${data.nombre}`
         });
       }
+    } else {
+      return res.status(400).json({
+        Ok: false,
+        msg: 'El nombre es obligatorio para actualizar'
+      });
+    }    // Agregar fecha de actualización
+    data.fecha_actualizacion = new Date();
+
+    console.log('Data being sent to update:', data);
+
+    try {
+      // Actualizar el grupo multimedia
+      const grupomultimedia = await GrupoMultimedia.findByIdAndUpdate(
+        id, 
+        data, 
+        { new: true, runValidators: true } // Devolver el documento actualizado y ejecutar validadores
+      );
+
+      if (!grupomultimedia) {
+        return res.status(404).json({
+          Ok: false,
+          msg: `No se pudo actualizar el grupo multimedia con ID ${id}`
+        });
+      }
+
+      console.log('Grupo multimedia updated successfully:', grupomultimedia);
+      return res.json({ Ok: true, resp: grupomultimedia });
+    } catch (dbError) {
+      console.error('Error in database update operation:', dbError);
+      return res.status(500).json({ 
+        Ok: false, 
+        msg: 'Error en la operación de actualización en la base de datos', 
+        resp: dbError.message 
+      });
     }
-
-    data.usuario = req.usuario._id;
-    data.fecha_actualizacion = now();
-
-    const grupomultimedia = await GrupoMultimedia.findByIdAndUpdate(id, data, {
-      new: true,
-    });
-
-    res.json({ Ok: true, resp: grupomultimedia });
   } catch (error) {
-    res.json({ Ok: false, resp: error });
+    console.error('Error in actualizarGrupoMultimedia:', error);
+    return res.status(500).json({ 
+      Ok: false, 
+      msg: 'Error al actualizar el grupo multimedia', 
+      resp: error.message 
+    });
   }
 };
 
 const borrarGrupoMultimedia = async (req, res = response) => {
   const { id } = req.params;
+  
+  console.log('borrarGrupoMultimedia endpoint called');
+  console.log('ID:', id);
+  
   try {
+    // Verificar si el ID es válido
+    if (!id.match(/^[0-9a-fA-F]{24}$/)) {
+      return res.status(400).json({ 
+        Ok: false, 
+        msg: 'ID no válido',
+        resp: `El ID ${id} no es un ObjectId válido de MongoDB`
+      });
+    }
+    
+    // Verificar si el grupo multimedia existe
+    const grupoExistente = await GrupoMultimedia.findById(id);
+    if (!grupoExistente) {
+      return res.status(404).json({
+        Ok: false,
+        msg: `No se encontró un grupo multimedia con el ID ${id}`
+      });
+    }
+    
+    // Actualizar el estado a false (borrado lógico) y agregar fecha de actualización
     const grupomultimediaBorrada = await GrupoMultimedia.findByIdAndUpdate(
       id,
-      { estado: false, fecha_actualizacion: now() },
+      { estado: false, fecha_actualizacion: new Date() },
       { new: true }
     );
-
-    res.json({ Ok: true, resp: grupomultimediaBorrada });
+    
+    console.log('Grupo multimedia deleted successfully:', grupomultimediaBorrada);
+    return res.json({ Ok: true, resp: grupomultimediaBorrada });
   } catch (error) {
-    res.json({ Ok: false, resp: error });
+    console.error('Error in borrarGrupoMultimedia:', error);
+    return res.status(500).json({ 
+      Ok: false, 
+      msg: 'Error al eliminar el grupo multimedia', 
+      resp: error.message 
+    });
   }
 };
 

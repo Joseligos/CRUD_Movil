@@ -18,21 +18,19 @@
   </div>
   
   <ion-list *ngIf="!loading && grupos.length > 0">
-    <ion-item-sliding *ngFor="let grupo of grupos">
-      <ion-item detail>
+    <ion-item-sliding *ngFor="let grupo of grupos">      <ion-item detail [routerLink]="['/grupo-multimedia/' + grupo._id + '/edit']">
         <ion-label>
           <h2>{{ grupo.nombre }}</h2>
           <p>ID: {{ grupo._id }}</p>
           <p *ngIf="grupo.fecha_creacion">Creado: {{ grupo.fecha_creacion | date:'shortDate' }}</p>
         </ion-label>
       </ion-item>
-      
-      <ion-item-options side="end">
-        <ion-item-option color="primary" [routerLink]="['/grupo-multimedia', grupo._id, 'edit']">
+        <ion-item-options side="end">
+        <ion-item-option color="primary" [routerLink]="['/grupo-multimedia/' + grupo._id + '/edit']">
           <ion-icon name="create-outline" slot="icon-only"></ion-icon>
-        </ion-item-option>
-        <ion-item-option color="danger" (click)="deleteGrupo(grupo._id || '')">
+        </ion-item-option>        <ion-item-option color="danger" (click)="deleteGrupo(grupo._id || '')">
           <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+          <div>Eliminar</div>
         </ion-item-option>
       </ion-item-options>
     </ion-item-sliding>

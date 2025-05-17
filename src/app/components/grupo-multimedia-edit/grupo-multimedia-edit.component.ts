@@ -45,16 +45,17 @@ export class GrupoMultimediaEditComponent implements OnInit {
       }
     });
   }
-  
-  async loadGrupo(id: string) {
+    async loadGrupo(id: string) {
     const loading = await this.loadingCtrl.create({
       message: 'Cargando información...'
     });
     await loading.present();
     
+    console.log('Fetching grupo multimedia with ID:', id);
     this.grupoService.getGrupoMultimedia(id).subscribe({
       next: (resp) => {
         loading.dismiss();
+        console.log('Grupo multimedia response:', resp);
         if (resp.Ok) {
           this.grupo = resp.resp as GrupoMultimedia;
           this.grupoForm.setValue({
@@ -64,12 +65,15 @@ export class GrupoMultimediaEditComponent implements OnInit {
           this.presentToast('Error al cargar el grupo multimedia');
           this.router.navigate(['/grupo-multimedia']);
         }
-      },
-      error: (err) => {
+      },      error: (err) => {
         loading.dismiss();
-        console.error(err);
-        this.presentToast('Error al cargar el grupo multimedia');
-        this.router.navigate(['/grupo-multimedia']);
+        console.error('Error al cargar el grupo:', err);
+        let errorMessage = 'Error al cargar el grupo multimedia';
+        if (err.error && err.error.msg) {
+          errorMessage = err.error.msg;
+        }
+        this.presentToast(errorMessage);
+        this.router.navigate(['/tabs/tab5']);
       }
     });
   }
@@ -84,31 +88,40 @@ export class GrupoMultimediaEditComponent implements OnInit {
       message: this.isEdit ? 'Actualizando...' : 'Creando...'
     });
     await loading.present();
-    
-    const grupoData: GrupoMultimedia = {
-      nombre: this.grupoForm.value.nombre
+      const grupoData: GrupoMultimedia = {
+      nombre: this.grupoForm.value.nombre.trim()
     };
     
-    console.log('Enviando datos:', this.isEdit ? 'UPDATE' : 'CREATE', grupoData);
-    
-    if (this.isEdit) {
+    console.log('Enviando datos:', this.isEdit ? 'UPDATE' : 'CREATE', grupoData);    if (this.isEdit) {
       this.grupoService.updateGrupoMultimedia(this.grupoId, grupoData).subscribe({
         next: (resp) => {
           loading.dismiss();
+          console.log('Update response:', resp);
           if (resp.Ok) {
             this.presentToast('Grupo multimedia actualizado correctamente');
             this.router.navigate(['/tabs/tab5']);
           } else {
-            this.presentToast('Error al actualizar el grupo multimedia');
+            let errorMsg = 'Error al actualizar el grupo multimedia';
+            if (resp.resp && typeof resp.resp === 'string') {
+              errorMsg += `: ${resp.resp}`;
+            }
+            this.presentToast(errorMsg);
           }
-        },        error: (err) => {
+        },
+        error: (err) => {
           loading.dismiss();
           console.error('Error durante la actualización:', err);
-          if (err.error && err.error.msg) {
-            this.presentToast(err.error.msg);
-          } else {
-            this.presentToast('Error al actualizar el grupo multimedia');
+          let errorMsg = 'Error al actualizar el grupo multimedia';
+          
+          if (err.error) {
+            if (err.error.msg) {
+              errorMsg += `: ${err.error.msg}`;
+            } else if (err.error.message) {
+              errorMsg += `: ${err.error.message}`;
+            }
           }
+          
+          this.presentToast(errorMsg);
         }
       });
     } else {
