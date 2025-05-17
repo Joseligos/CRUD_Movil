@@ -24,11 +24,15 @@ export const routes: Routes = [
         path: 'tab4',
         loadComponent: () =>
           import('../pages/heroes/heroes.page').then((m) => m.HeroesPage),
-      },
-      {
+      },      {
         path: 'tab5',
         loadComponent: () =>
           import('../pages/grupo-multimedia/grupo-multimedia.page').then((m) => m.GrupoMultimediaPage),
+      },
+      {
+        path: 'multimedia',
+        loadComponent: () =>
+          import('../pages/multimedia/multimedia.page').then((m) => m.MultimediaPage),
       },
 
       {

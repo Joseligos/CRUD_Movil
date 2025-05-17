@@ -1,0 +1,25 @@
+.item-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 15px;
+}
+
+ion-item-option ion-icon {
+  font-size: 24px;
+  margin-right: 4px;
+}
+
+.error-message {
+  font-size: 12px;
+  margin: 5px 0;
+}
+
+ion-content {
+  --padding-bottom: 80px;
+}
+
+ion-fab {
+  margin-bottom: 20px;
+}

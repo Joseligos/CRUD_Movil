@@ -5,8 +5,7 @@ const { now } = require("mongoose");
 
 const obtenerMultimedias = async (req, res = response) => {
   const { limite = 100, desde = 0 } = req.query;
-  //const query = { estado: true };
-  const query = {};
+  const query = { estado: true };
 
   try {
     const [total, multimedias] = await Promise.all([
@@ -208,18 +207,34 @@ const actualizarMultimedia = async (req, res = response) => {
 const borrarMultimedia = async (req, res = response) => {
   const { id } = req.params;
 
-  console.log(id);
+  console.log('Intentando borrar multimedia con ID:', id);
 
   try {
+    // Verificar si la multimedia existe
+    const multimediaExiste = await Multimedia.findById(id);
+    if (!multimediaExiste) {
+      return res.status(404).json({
+        Ok: false,
+        msg: `No se encontró una multimedia con el ID ${id}`
+      });
+    }
+
+    // Realizar borrado lógico (cambiar estado a false)
     const multimediaBorrado = await Multimedia.findByIdAndUpdate(
       id,
       { estado: false, fecha_actualizacion: now() },
       { new: true }
     );
 
+    console.log('Multimedia borrada (estado=false):', multimediaBorrado);
     res.json({ Ok: true, resp: multimediaBorrado });
   } catch (error) {
-    res.json({ Ok: false, resp: error });
+    console.error('Error al borrar multimedia:', error);
+    res.status(500).json({ 
+      Ok: false, 
+      msg: 'Error al eliminar la multimedia', 
+      resp: error.message 
+    });
   }
 };
 

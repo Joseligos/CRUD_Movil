@@ -16,9 +16,16 @@ export const routes: Routes = [
   {
     path: 'grupo-multimedia/new',
     loadComponent: () => import('./pages/grupo-multimedia-form/grupo-multimedia-form.page').then( m => m.GrupoMultimediaFormPage)
-  },
-  {
+  },  {
     path: 'grupo-multimedia/:id/edit',
     loadComponent: () => import('./pages/grupo-multimedia-form/grupo-multimedia-form.page').then( m => m.GrupoMultimediaFormPage)
+  },
+  {
+    path: 'multimedia/new',
+    loadComponent: () => import('./pages/multimedia-form/multimedia-form.page').then( m => m.MultimediaFormPage)
+  },
+  {
+    path: 'multimedia/:id/edit',
+    loadComponent: () => import('./pages/multimedia-form/multimedia-form.page').then( m => m.MultimediaFormPage)
   },
 ];
