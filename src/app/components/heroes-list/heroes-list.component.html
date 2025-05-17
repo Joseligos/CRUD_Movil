@@ -1,0 +1,37 @@
+<ion-list class="ion-padding-top">
+  <ion-list-header>
+    <ion-label
+      ><strong>{{ titulo }} - {{ subtitulo }}</strong></ion-label
+    >
+
+    <ion-button color="secondary" (click)="crearHeroe()">
+      <ion-icon name="save"></ion-icon>   
+      Crear Heroe
+    </ion-button>
+  </ion-list-header>
+
+  @for (heroe of heroes; track heroe; let i = $index) {
+  <ion-item>
+    <ion-avatar slot="start">
+      <img alt="Silhouette of a person's head" [src]="heroe.img" />
+    </ion-avatar>
+    <ion-label (click)="verHeroe(heroe._id)">
+      <strong>{{heroe._id}}.</strong> {{ heroe.nombre}} 
+    </ion-label>
+
+    <ion-buttons>
+      <ion-button (click)="editarHeroe(heroe._id)" aria-label="Favorite">
+        <ion-icon color="primary" name="create"></ion-icon>   
+      </ion-button>  
+
+      <ion-button (click)="eliminarHeroe(heroe)" aria-label="Favorite">
+        <ion-icon color="danger" name="trash"></ion-icon>   
+      </ion-button>  
+      
+
+    </ion-buttons>
+
+
+  </ion-item>
+  }
+</ion-list>
