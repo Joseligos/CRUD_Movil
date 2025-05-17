@@ -28,7 +28,7 @@
       <ion-label position="floating">
         Grupo Multimedia <ion-text color="danger">*</ion-text>
       </ion-label>
-      <ion-select formControlName="IdGrupoMultimedia" placeholder="Seleccione un grupo" interface="action-sheet">
+      <ion-select formControlName="IdGrupoMultimedia" placeholder="Seleccione un grupo" interface="action-sheet" [disabled]="!gruposCargados">
         <ion-select-option *ngFor="let grupo of grupos" [value]="grupo._id">{{ grupo.nombre }}</ion-select-option>
       </ion-select>
     </ion-item>

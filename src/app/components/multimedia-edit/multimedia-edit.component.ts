@@ -26,6 +26,7 @@ export class MultimediaEditComponent implements OnInit {
   multimedia: Multimedia | null = null;
   submitted = false;
   grupos: GrupoMultimedia[] = [];
+  gruposCargados = false;
   
   constructor(
     private fb: FormBuilder,
@@ -67,6 +68,7 @@ export class MultimediaEditComponent implements OnInit {
         loading.dismiss();
         if (resp.Ok) {
           this.grupos = resp.resp as GrupoMultimedia[];
+          this.gruposCargados = true;
         } else {
           this.presentToast('Error al cargar los grupos multimedia');
         }
@@ -92,10 +94,13 @@ export class MultimediaEditComponent implements OnInit {
         console.log('Multimedia response:', resp);
         if (resp.Ok) {
           this.multimedia = resp.resp as Multimedia;
+          const grupoId = typeof this.multimedia?.IdGrupoMultimedia === 'object' && this.multimedia?.IdGrupoMultimedia !== null
+            ? (this.multimedia.IdGrupoMultimedia as { _id: string })._id
+            : this.multimedia?.IdGrupoMultimedia;
           this.multimediaForm.setValue({
             url: this.multimedia.url,
             tipo: this.multimedia.tipo || '',
-            IdGrupoMultimedia: this.multimedia.IdGrupoMultimedia
+            IdGrupoMultimedia: grupoId
           });
         } else {
           this.presentToast('Error al cargar la multimedia');
