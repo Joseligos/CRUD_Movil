@@ -17,14 +17,6 @@ app.use((req, res, next) => {
     if (req.method === 'POST' || req.method === 'PUT') {
         console.log('Request body:', JSON.stringify(req.body));
     }
-    // Add this line to log query parameters
-    if (Object.keys(req.query).length > 0) {
-        console.log('Query params:', JSON.stringify(req.query));
-    }
-    // Add this line to log route parameters
-    if (req.params && Object.keys(req.params).length > 0) {
-        console.log('Route params:', JSON.stringify(req.params));
-    }
     next();
 })
 
@@ -39,12 +31,7 @@ app.get('/', (req, res) => {
 });
 
 // Mount routes properly
-console.log('Registering routes');
 app.use('/api/heroes', require('./routes/heroes'));
-console.log('Registered: /api/heroes');
 app.use('/api/multimedias', require('./routes/multimedias'));
-console.log('Registered: /api/multimedias');
 app.use('/api/multimediasheroe', require('./routes/multimediasheroe'));
-console.log('Registered: /api/multimediasheroe');
 app.use('/api/grupomultimedias', require('./routes/grupomultimedias'));
-console.log('Registered: /api/grupomultimedias');
