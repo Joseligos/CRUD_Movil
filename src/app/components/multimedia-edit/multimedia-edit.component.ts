@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { LoadingController, ToastController } from '@ionic/angular/standalone';
-import { IonButton, IonButtons, IonContent, IonItem, IonLabel, IonInput, IonCard, IonCardHeader, IonCardContent, IonBackButton, IonHeader, IonToolbar, IonTitle, IonText, IonSelect, IonSelectOption } from '@ionic/angular/standalone';
+import { IonButton, IonButtons, IonContent, IonItem, IonLabel, IonInput, IonCard, IonCardHeader, IonCardContent, IonBackButton, 
+  IonHeader, IonToolbar, IonTitle, IonText, IonSelect, IonSelectOption, IonFooter } from '@ionic/angular/standalone';
 import { CommonModule } from '@angular/common';
 import { Multimedia } from '../../interfaces/multimedia.interface';
 import { MultimediaService } from '../../services/multimedia.service';
@@ -14,7 +15,8 @@ import { GrupoMultimediaService } from '../../services/grupo-multimedia.service'
   templateUrl: './multimedia-edit.component.html',
   styleUrls: ['./multimedia-edit.component.scss'],
   standalone: true,
-  imports: [IonButton, IonButtons, IonContent, IonItem, IonLabel, IonInput, IonCard, IonCardHeader, IonCardContent, IonBackButton, IonHeader, IonToolbar, IonTitle, IonText, IonSelect, IonSelectOption, CommonModule, ReactiveFormsModule, RouterModule]
+  imports: [IonButton, IonButtons, IonContent, IonItem, IonLabel, IonInput, IonCard, IonCardHeader, IonCardContent, IonBackButton,
+     IonHeader, IonToolbar, IonTitle, IonText, IonSelect, IonSelectOption, CommonModule, ReactiveFormsModule, RouterModule, IonFooter]
 })
 export class MultimediaEditComponent implements OnInit {
   

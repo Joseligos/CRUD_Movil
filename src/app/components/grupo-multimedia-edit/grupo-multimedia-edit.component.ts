@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { LoadingController, ToastController } from '@ionic/angular/standalone';
-import { IonButton, IonButtons, IonContent, IonItem, IonLabel, IonInput, IonCard, IonCardHeader, IonCardContent, IonBackButton, IonHeader, IonToolbar, IonTitle, IonText } from '@ionic/angular/standalone';
+import { IonButton, IonButtons, IonContent, IonItem, IonLabel, IonInput, IonCard, IonCardHeader, IonCardContent, IonBackButton, 
+  IonHeader, IonToolbar, IonTitle, IonText, IonFooter } from '@ionic/angular/standalone';
 import { CommonModule } from '@angular/common';
 import { GrupoMultimedia } from '../../interfaces/grupo-multimedia.interface';
 import { GrupoMultimediaService } from '../../services/grupo-multimedia.service';
@@ -12,7 +13,8 @@ import { GrupoMultimediaService } from '../../services/grupo-multimedia.service'
   templateUrl: './grupo-multimedia-edit.component.html',
   styleUrls: ['./grupo-multimedia-edit.component.scss'],
   standalone: true,
-  imports: [IonButton, IonButtons, IonContent, IonItem, IonLabel, IonInput, IonCard, IonCardHeader, IonCardContent, IonBackButton, IonHeader, IonToolbar, IonTitle, IonText, CommonModule, ReactiveFormsModule, RouterModule]
+  imports: [IonButton, IonButtons, IonContent, IonItem, IonLabel, IonInput, IonCard, IonCardHeader, IonCardContent, IonBackButton,
+     IonHeader, IonToolbar, IonTitle, IonText, CommonModule, ReactiveFormsModule, RouterModule, IonFooter]
 })
 export class GrupoMultimediaEditComponent implements OnInit {
   

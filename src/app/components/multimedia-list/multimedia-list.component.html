@@ -55,15 +55,8 @@
   <div *ngIf="!loading && multimedias.length === 0" class="ion-padding ion-text-center">
     <ion-icon name="image-outline" style="font-size: 48px; color: var(--ion-color-medium)"></ion-icon>
     <p>No hay multimedias disponibles.</p>
-    <ion-button expand="block" routerLink="/multimedia/new">
-      Crear Nueva Multimedia
-    </ion-button>
   </div>
   
   <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="!loading && multimedias.length > 0">
-    <ion-button routerLink="/multimedia/new" shape="round">
-      <ion-icon name="add"></ion-icon>
-      Nueva Multimedia
-    </ion-button>
   </ion-fab>
 </ion-content>

@@ -7,10 +7,12 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
+<ion-content class="ion-padding" [fullscreen]="true">
   <form [formGroup]="multimediaForm" (ngSubmit)="onSubmit()">
     <ion-item>
-      <ion-label position="floating">URL <ion-text color="danger">*</ion-text></ion-label>
+      <ion-label position="floating">
+        URL <ion-text color="danger">*</ion-text>
+      </ion-label>
       <ion-input type="text" formControlName="url"></ion-input>
     </ion-item>
     <ion-text color="danger" *ngIf="submitted && f['url'].errors">
@@ -23,22 +25,26 @@
     </ion-item>
 
     <ion-item>
-      <ion-label position="floating">Grupo Multimedia <ion-text color="danger">*</ion-text></ion-label>
+      <ion-label position="floating">
+        Grupo Multimedia <ion-text color="danger">*</ion-text>
+      </ion-label>
       <ion-select formControlName="IdGrupoMultimedia" placeholder="Seleccione un grupo" interface="action-sheet">
         <ion-select-option *ngFor="let grupo of grupos" [value]="grupo._id">{{ grupo.nombre }}</ion-select-option>
       </ion-select>
     </ion-item>
     <ion-text color="danger" *ngIf="submitted && f['IdGrupoMultimedia'].errors">
-      <p class="error-message" *ngIf="f['IdGrupoMultimedia'].errors['required']">El grupo multimedia es obligatorio</p>
+      <p class="error-message" *ngIf="f['IdGrupoMultimedia'].errors['required']">
+        El grupo multimedia es obligatorio
+      </p>
     </ion-text>
-
-    <div class="ion-padding-top">
-      <ion-button expand="block" type="submit" [disabled]="multimediaForm.invalid && submitted">
-        {{ isEdit ? 'Actualizar' : 'Crear' }} Multimedia
-      </ion-button>
-      <ion-button expand="block" fill="outline" routerLink="/tabs/multimedia" class="ion-margin-top">
-        Cancelar
-      </ion-button>
-    </div>
   </form>
 </ion-content>
+
+<ion-footer class="ion-padding">
+  <ion-button expand="block" type="submit" [disabled]="multimediaForm.invalid && submitted" (click)="onSubmit()">
+    {{ isEdit ? 'Actualizar' : 'Crear' }} Multimedia
+  </ion-button>
+  <ion-button expand="block" fill="outline" routerLink="/tabs/multimedia" class="ion-margin-top">
+    Cancelar
+  </ion-button>
+</ion-footer>

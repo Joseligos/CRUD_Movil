@@ -1,0 +1,14 @@
+.error-message {
+  font-size: 12px;
+  margin: 0 0 10px 16px;
+  color: var(--ion-color-danger);
+}
+
+ion-content {
+  min-height: 100%;
+  --padding-bottom: 16px;
+}
+
+ion-footer {
+  padding-bottom: env(safe-area-inset-bottom);
+}
