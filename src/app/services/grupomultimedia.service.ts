@@ -12,7 +12,7 @@ export class GrupoMultimediaService {
   constructor(private http: HttpClient) { }
 
   getGrupos() {
-    return this.http.get(`${URL_HEROES}/grupomultimedias`).pipe(map(data => data));
+    return this.http.get(`${URL_HEROES}/grupomultimedias/grupomultimedias`).pipe(map(data => data));
   }
 
   getGrupoPorId(id: string) {

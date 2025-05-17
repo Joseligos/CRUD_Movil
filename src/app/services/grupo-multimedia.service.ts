@@ -8,7 +8,7 @@ import { URL_BACKEND } from '../config/url.servicios';
   providedIn: 'root'
 })
 export class GrupoMultimediaService {
-  private apiUrl = `${URL_BACKEND}/grupomultimedias/grupomultimedias`;
+  private apiUrl = `${URL_BACKEND}/grupomultimedias`;
   constructor(private http: HttpClient) { 
     console.log('API URL:', this.apiUrl);
   }
@@ -59,7 +59,7 @@ export class GrupoMultimediaService {
       nombre: grupo.nombre
     };
     
-    return this.http.put<GrupoMultimediaResponse>(`${this.apiUrl}/${id}`, payload)
+    return this.http.put<GrupoMultimediaResponse>(`${this.apiUrl}/grupomultimedias/${id}`, payload)
       .pipe(
         tap(response => console.log('Update grupo multimedia response:', response)),
         catchError(error => {
