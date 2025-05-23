@@ -5,6 +5,7 @@ import { IonContent, IonHeader, IonToolbar, IonTitle, IonButtons, IonButton, Ion
 import { RouterModule } from '@angular/router';
 import { addIcons } from 'ionicons';
 import { add } from 'ionicons/icons';
+import { DataLoaderService } from '../../services/data-loader.service';
 
 @Component({
   selector: 'app-multimediaheroe',
@@ -27,11 +28,13 @@ import { add } from 'ionicons/icons';
 })
 export class MultimediaHeroePage implements OnInit {
 
-  constructor() {
+  constructor(private dataLoader: DataLoaderService) {
     addIcons({ add });
   }
 
   ngOnInit() {
+    // Inicializar datos al cargar la página
+    this.dataLoader.loadAllData();
   }
 
 }

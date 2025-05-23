@@ -39,6 +39,8 @@ const obtenerMultimediasHeroes = async (req, res = response) => {
   const query = {};
 
   try {
+    console.log('GET /api/multimediasheroe - Obteniendo lista de asociaciones multimedia-héroe');
+    
     const [total, multimediasHeroe] = await Promise.all([
       MultimediaHeroe.countDocuments(query),
       MultimediaHeroe.find(query)
@@ -48,6 +50,8 @@ const obtenerMultimediasHeroes = async (req, res = response) => {
         .limit(Number(limite)),
     ]);
 
+    console.log(`Se encontraron ${total} asociaciones multimedia-héroe`);
+    
     res.json({ Ok: true, total, resp: multimediasHeroe });
   } catch (error) {
     console.error('Error en obtenerMultimediasHeroes:', error);
@@ -60,9 +64,13 @@ const crearMultimediaHeroe = async (req, res = response) => {
     const { estado, ...body } = req.body;
 
     try {
+        console.log('POST /api/multimediasheroe - Creando nueva asociación multimedia-héroe');
+        console.log('Datos recibidos:', body);
+        
         const multimediaHeroeDB = await MultimediaHeroe.findOne({ IdHeroe: body.IdHeroe, IdMultimedia: body.IdMultimedia });
 
         if (multimediaHeroeDB) {
+            console.log('Error: La asociación ya existe para este héroe y multimedia');
             return res.status(400).json({
                 msg: `La multimedia, ya existe para este Heroe`,
             });
@@ -78,9 +86,11 @@ const crearMultimediaHeroe = async (req, res = response) => {
 
         // Guardar DB
         await multimediaHeroe.save();
+        console.log('Asociación creada correctamente con ID:', multimediaHeroe._id);
 
         res.status(201).json({ Ok: true, resp: multimediaHeroe });
     } catch (error) {
+        console.error('Error en crearMultimediaHeroe:', error);
         res.json({ Ok: false, resp: error });
     }
 };

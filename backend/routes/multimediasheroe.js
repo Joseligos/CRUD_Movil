@@ -14,7 +14,16 @@ const { existeMultimediaPorId,existeHeroePorId,existeMultimediaHeroePorId } = re
 const router = Router();
 
 // Ruta para obtener todos los registros
-router.get('/multimediasheroe', obtenerMultimediaHeroe);
+router.get('/', (req, res, next) => {
+    console.log('Request recibida para obtener todas las asociaciones multimedia-héroe');
+    next();
+}, obtenerMultimediasHeroes);
+
+// Ruta para obtener un registro específico
+router.get('/multimedia/:id', (req, res, next) => {
+    console.log(`Request recibida para obtener detalles de la asociación con ID: ${req.params.id}`);
+    next();
+}, obtenerMultimediaHeroe);
 
 // Rutas específicas primero
 router.get('/heroe/:id',[

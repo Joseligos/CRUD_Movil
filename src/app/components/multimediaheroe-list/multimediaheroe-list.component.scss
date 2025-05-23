@@ -8,6 +8,25 @@
   text-align: center;
 }
 
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 50vh;
+  
+  ion-spinner {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 16px;
+  }
+  
+  p {
+    font-size: 16px;
+    color: var(--ion-color-medium);
+  }
+}
+
 ion-card {
   width: 100%;
   max-width: 400px;

@@ -1,26 +1,40 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { URL_BACKEND } from '../config/url.servicios';
+import { URL_BACKEND, getBackendUrl } from '../config/url.servicios';
 import { MultimediaHeroe } from '../interfaces/multimediaheroe.interface';
-import { Observable, catchError, map, tap, throwError } from 'rxjs';
+import { Observable, catchError, map, tap, throwError, retry } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class MultimediaHeroeService {  private apiUrl = `${URL_BACKEND}/multimediasheroe`;
+export class MultimediaHeroeService {  
+  private apiUrl = `${getBackendUrl()}/multimediasheroe`;
   
   constructor(private http: HttpClient) {
     console.log('MultimediaHeroe API URL:', this.apiUrl);
   }
-  
-  private handleError(error: HttpErrorResponse) {
+    private handleError(error: HttpErrorResponse) {
     console.error('API Error:', error);
+    let errorMessage = 'Error desconocido';
+    
+    if (error.error instanceof ErrorEvent) {
+      // Error del lado del cliente
+      errorMessage = `Error: ${error.error.message}`;
+    } else {
+      // Error del lado del servidor
+      errorMessage = `Código: ${error.status}, Mensaje: ${error.message}`;
+    }
+    
+    console.error(errorMessage);
     return throwError(() => error);
   }
-    getMultimediaHeroe(): Observable<any> {
-    const url = `${this.apiUrl}/multimediasheroe`;
+  
+  getMultimediaHeroe(): Observable<any> {
+    // Corrección: esta URL debe obtener todas las asociaciones de multimedia-héroe
+    const url = `${this.apiUrl}`;
     console.log('Calling URL for getMultimediaHeroe:', url);
     return this.http.get(url).pipe(
+      retry(3), // Reintentar hasta 3 veces en caso de error
       tap(response => console.log('API Response from getMultimediaHeroe:', response)),
       catchError(this.handleError)
     );

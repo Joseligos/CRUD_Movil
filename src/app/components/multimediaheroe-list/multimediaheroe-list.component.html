@@ -2,7 +2,14 @@
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-    <ion-list *ngIf="multimediaHeroes && multimediaHeroes.length > 0">
+
+  <!-- Spinner de carga -->
+  <div *ngIf="loading" class="loading-container ion-text-center">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Cargando asociaciones multimedia-héroe...</p>
+  </div>
+    
+  <ion-list *ngIf="multimediaHeroes && multimediaHeroes.length > 0">
     <ion-item-sliding *ngFor="let multimedia of multimediaHeroes">
       <ion-item>
         <ion-thumbnail slot="start">

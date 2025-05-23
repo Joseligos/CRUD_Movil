@@ -2,10 +2,16 @@ const express = require('express')
 const mongoose = require('mongoose')
 const cors = require('cors')
 const app = express()
+const { diagnoseMultimediaHeroe } = require('./helpers/diagnostics')
 
 const PORT = process.env.PORT || 5000
 app.listen(PORT, () => {
     console.log(`Servidor en funcionamiento en el puerto ${PORT}`)
+    
+    // Ejecutar diagnóstico después de que el servidor se inicie
+    setTimeout(() => {
+        diagnoseMultimediaHeroe();
+    }, 2000);
 })
 
 app.use(cors())

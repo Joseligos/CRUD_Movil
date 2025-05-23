@@ -7,6 +7,7 @@ import { MultimediaHeroe } from '../../interfaces/multimediaheroe.interface';
 import { MultimediaHeroeService } from '../../services/multimediaheroe.service';
 import { MultimediaService } from '../../services/multimedia.service';
 import { HeroesBDService } from '../../services/heroes-bd.service';
+import { DataLoaderService } from '../../services/data-loader.service';
 import { addIcons } from 'ionicons';
 import { save, arrowBack } from 'ionicons/icons';
 
@@ -44,13 +45,13 @@ export class MultimediaHeroeEditComponent implements OnInit {
   isNew = true;
   heroes: any[] = [];
   multimedias: any[] = [];
-  
-  constructor(
+    constructor(
     private route: ActivatedRoute,
     private router: Router,
     private multimediaHeroeService: MultimediaHeroeService,
     private multimediaService: MultimediaService,
     private heroesService: HeroesBDService,
+    private dataLoader: DataLoaderService,
     private loadingCtrl: LoadingController,
     private toastCtrl: ToastController
   ) {
@@ -122,8 +123,7 @@ export class MultimediaHeroeEditComponent implements OnInit {
       }
     });
   }
-  
-  async saveMultimediaHeroe() {
+    async saveMultimediaHeroe() {
     if (!this.multimediaHeroe.IdHeroe || !this.multimediaHeroe.IdMultimedia) {
       this.presentToast('Por favor, complete todos los campos requeridos');
       return;
@@ -139,7 +139,11 @@ export class MultimediaHeroeEditComponent implements OnInit {
         next: (resp: any) => {
           if (resp.Ok) {
             this.presentToast('Asociación creada correctamente');
-            this.router.navigate(['/tabs/multimediaheroe']);
+            
+            // Recargar datos antes de navegar
+            this.dataLoader.loadAllData().then(() => {
+              this.router.navigate(['/tabs/multimediaheroe']);
+            });
           } else {
             this.presentToast('Error al crear la asociación');          }
           loading.dismiss();
@@ -161,7 +165,11 @@ export class MultimediaHeroeEditComponent implements OnInit {
         next: (resp: any) => {
           if (resp.Ok) {
             this.presentToast('Asociación actualizada correctamente');
-            this.router.navigate(['/tabs/multimediaheroe']);
+            
+            // Recargar datos antes de navegar
+            this.dataLoader.loadAllData().then(() => {
+              this.router.navigate(['/tabs/multimediaheroe']);
+            });
           } else {
             this.presentToast('Error al actualizar la asociación');          }
           loading.dismiss();

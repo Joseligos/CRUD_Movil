@@ -1,33 +1,36 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AlertController, LoadingController, ToastController } from '@ionic/angular/standalone';
-import { IonButton, IonButtons, IonContent, IonIcon, IonItem, IonLabel, IonList, IonRefresher, IonRefresherContent, IonToolbar, IonFab, IonCardContent, IonCardTitle, IonCardHeader, IonCard, IonItemOption, IonItemOptions, IonItemSliding, IonTitle, IonHeader, IonImg, IonThumbnail } from '@ionic/angular/standalone';
+import { IonButton, IonButtons, IonContent, IonIcon, IonItem, IonLabel, IonList, IonRefresher, IonRefresherContent, IonToolbar, IonFab, IonCardContent, IonCardTitle, IonCardHeader, IonCard, IonItemOption, IonItemOptions, IonItemSliding, IonTitle, IonHeader, IonImg, IonThumbnail, IonSpinner } from '@ionic/angular/standalone';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MultimediaHeroe } from '../../interfaces/multimediaheroe.interface';
 import { MultimediaHeroeService } from '../../services/multimediaheroe.service';
 import { HeroesBDService } from '../../services/heroes-bd.service';
 import { MultimediaService } from '../../services/multimedia.service';
+import { DataLoaderService } from '../../services/data-loader.service';
 import { addIcons } from 'ionicons';
 import { add, create, trash, image, person } from 'ionicons/icons';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-multimediaheroe-list',
   templateUrl: './multimediaheroe-list.component.html',
   styleUrls: ['./multimediaheroe-list.component.scss'],  
   standalone: true,
-  imports: [IonButton, IonButtons, IonContent, IonIcon, IonItem, IonLabel, IonList, IonRefresher, IonRefresherContent, CommonModule, RouterModule, IonToolbar, IonFab, IonCardContent, IonCardTitle, IonCardHeader, IonCard, IonItemOption, IonItemOptions, IonItemSliding, IonTitle, IonHeader, IonImg, IonThumbnail]
+  imports: [IonButton, IonButtons, IonContent, IonIcon, IonItem, IonLabel, IonList, IonRefresher, IonRefresherContent, CommonModule, RouterModule, IonToolbar, IonFab, IonCardContent, IonCardTitle, IonCardHeader, IonCard, IonItemOption, IonItemOptions, IonItemSliding, IonTitle, IonHeader, IonImg, IonThumbnail, IonSpinner]
 })
-export class MultimediaHeroeListComponent implements OnInit {
+export class MultimediaHeroeListComponent implements OnInit, OnDestroy {
   
   multimediaHeroes: any[] = [];
-  loading = false;
   heroes: any[] = [];
   multimedias: any[] = [];
+  loading = false;
+  
+  private subscriptions: Subscription[] = [];
   
   constructor(
     private multimediaHeroeService: MultimediaHeroeService,
-    private heroesService: HeroesBDService,
-    private multimediaService: MultimediaService,
+    private dataLoader: DataLoaderService,
     private alertCtrl: AlertController,
     private loadingCtrl: LoadingController,
     private toastCtrl: ToastController
@@ -36,144 +39,57 @@ export class MultimediaHeroeListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.loadSequential();
-  }
-  
-  async loadSequential() {
-    try {
-      this.loading = true;
+    // Cargar datos al iniciar el componente
+    this.loadData();
+    
+    // Suscribirnos a los observables del servicio DataLoader
+    this.subscriptions.push(
+      this.dataLoader.heroes$.subscribe(heroes => {
+        this.heroes = heroes;
+        console.log('Heroes updated in component:', heroes.length);
+      }),
       
-      // Load heroes first
-      await this.loadHeroesPromise();
-      console.log('Heroes loaded:', this.heroes);
+      this.dataLoader.multimedias$.subscribe(multimedias => {
+        this.multimedias = multimedias;
+        console.log('Multimedias updated in component:', multimedias.length);
+      }),
       
-      // Load multimedias second
-      await this.loadMultimediasPromise();
-      console.log('Multimedias loaded:', this.multimedias);
+      this.dataLoader.multimediaHeroes$.subscribe(multimediaHeroes => {
+        this.multimediaHeroes = multimediaHeroes;
+        console.log('MultimediaHeroes updated in component:', multimediaHeroes.length);
+      }),
       
-      // Load multimedia-heroes last
-      await this.loadMultimediaHeroesPromise();
-      console.log('MultimediaHeroes loaded:', this.multimediaHeroes);
-      
-    } catch (error) {
-      console.error('Error loading data sequentially:', error);
-      this.presentToast('Error al cargar los datos');
-    } finally {
-      this.loading = false;
-    }
+      this.dataLoader.loading$.subscribe(loading => {
+        this.loading = loading;
+      })
+    );
   }
   
-  // Promise-based methods to ensure sequential loading
-  
-  loadHeroesPromise(): Promise<void> {
-    return new Promise((resolve, reject) => {
-      const loading = this.loadingCtrl.create({
-        message: 'Cargando héroes...'
-      }).then(loader => {
-        loader.present();
-        
-        this.heroesService.getHeroes().subscribe({
-          next: (resp: any) => {
-            if (resp && resp.Ok) {
-              this.heroes = resp.resp || [];
-              loader.dismiss();
-              resolve();
-            } else {
-              this.presentToast('Error al cargar héroes');
-              loader.dismiss();
-              reject('Error al cargar héroes');
-            }
-          },
-          error: (err: any) => {
-            console.error('Error al cargar héroes:', err);
-            this.presentToast('Error al cargar héroes');
-            loader.dismiss();
-            reject(err);
-          }
-        });
-      });
-    });
+  ngOnDestroy() {
+    // Limpiar todas las suscripciones al destruir el componente
+    this.subscriptions.forEach(sub => sub.unsubscribe());
   }
   
-  loadMultimediasPromise(): Promise<void> {
-    return new Promise((resolve, reject) => {
-      const loading = this.loadingCtrl.create({
-        message: 'Cargando multimedias...'
-      }).then(loader => {
-        loader.present();
-        
-        this.multimediaService.getMultimedias().subscribe({
-          next: (resp: any) => {
-            if (resp && resp.Ok) {
-              this.multimedias = resp.resp || [];
-              loader.dismiss();
-              resolve();
-            } else {
-              this.presentToast('Error al cargar multimedias');
-              loader.dismiss();
-              reject('Error al cargar multimedias');
-            }
-          },
-          error: (err: any) => {
-            console.error('Error al cargar multimedias:', err);
-            this.presentToast('Error al cargar multimedias');
-            loader.dismiss();
-            reject(err);
-          }
-        });
-      });
-    });
+  async loadData() {
+    await this.dataLoader.loadAllData();
   }
   
-  loadMultimediaHeroesPromise(): Promise<void> {
-    return new Promise((resolve, reject) => {
-      const loading = this.loadingCtrl.create({
-        message: 'Cargando asociaciones multimedia-héroe...'
-      }).then(loader => {
-        loader.present();
-        
-        this.multimediaHeroeService.getMultimediaHeroe().subscribe({
-          next: (resp: any) => {
-            console.log('Response from getMultimediaHeroe:', resp);
-            if (resp && resp.Ok) {
-              this.multimediaHeroes = resp.resp || [];
-              loader.dismiss();
-              resolve();
-            } else {
-              this.multimediaHeroes = [];
-              this.presentToast('Error al cargar asociaciones multimedia-héroe');
-              loader.dismiss();
-              reject('Error al cargar asociaciones');
-            }
-          },
-          error: (err: any) => {
-            console.error('Error detallado:', err);
-            this.multimediaHeroes = [];
-            let errorMsg = 'Error al cargar asociaciones multimedia-héroe';
-            
-            if (err.error && err.error.msg) {
-              errorMsg += `: ${err.error.msg}`;
-            } else if (err.status) {
-              errorMsg += ` (${err.status})`;
-            }
-            
-            this.presentToast(errorMsg);
-            loader.dismiss();
-            reject(err);
-          }
-        });
-      });
-    });
+  async doRefresh(event: any) {
+    console.log('Pull to refresh triggered');
+    await this.dataLoader.loadAllData(false);
+    event.target.complete();
+    this.presentToast('Datos actualizados');
   }
-    getHeroeNombre(heroe: any): string {
+  
+  getHeroeNombre(heroe: any): string {
     const heroeId = typeof heroe === 'string' ? heroe : heroe?._id;
-    console.log('Getting hero name for ID:', heroeId, 'from heroes:', this.heroes);
+    console.log('Getting hero name for ID:', heroeId);
     const encontrado = this.heroes.find(h => h._id === heroeId);
     return encontrado ? encontrado.nombre : (heroe?.nombre || heroeId || 'Héroe no encontrado');
   }
-    getMultimediaUrl(multimedia: any): string {
+    
+  getMultimediaUrl(multimedia: any): string {
     const multimediaId = typeof multimedia === 'string' ? multimedia : multimedia?._id;
-    console.log('Getting multimedia URL for ID:', multimediaId, 'from multimedias:', this.multimedias);
     const encontrado = this.multimedias.find(m => m._id === multimediaId);
     
     let url = encontrado ? encontrado.url : (multimedia?.url || '');
@@ -220,7 +136,8 @@ export class MultimediaHeroeListComponent implements OnInit {
       next: (resp: any) => {
         if (resp.Ok) {
           this.presentToast('Asociación eliminada correctamente');
-          this.loadSequential();
+          // Recargar los datos después de eliminar
+          this.loadData();
         } else {
           this.presentToast('Error al eliminar la asociación');
         }
@@ -232,11 +149,6 @@ export class MultimediaHeroeListComponent implements OnInit {
         loading.dismiss();
       }
     });
-  }
-  
-  async doRefresh(event: any) {
-    await this.loadSequential();
-    event.target.complete();
   }
   
   async presentToast(message: string) {
