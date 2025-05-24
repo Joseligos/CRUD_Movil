@@ -1,6 +1,6 @@
 export const URL_HEROES = "https://rest-sorella-production.up.railway.app/api";
 // Asegúrate de que esto apunte a tu servidor backend local o en producción
-export const URL_BACKEND = "http://localhost:5000/api";
+export const URL_BACKEND = "https://backendcrudmovil-production.up.railway.app/api";
 
 // Esta función permite determinar la URL base dependiendo del entorno
 export function getBackendUrl() {
